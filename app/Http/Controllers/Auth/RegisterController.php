@@ -6,6 +6,15 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Jrean\UserVerification\Traits\VerifiesUsers;
+    use Jrean\UserVerification\Facades\UserVerification;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
+
+use App\Mail\EmailVerification;
+ 
+use Mail;
 
 class RegisterController extends Controller
 {
@@ -21,6 +30,7 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    use VerifiesUsers;
 
     /**
      * Where to redirect users after registration.
@@ -36,7 +46,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+       $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
     }
 
     /**
@@ -52,7 +62,7 @@ class RegisterController extends Controller
             'lname' => 'required|string|max:60|min:3',
             'email' => 'required|string|email|max:50|unique:users',
             'password' => 'required|string|min:6|max:30|confirmed',
-            'phone' => 'required|numeric|regex:/(3589)[0-9]{6}/|digits:10',
+            'phone' => 'required|numeric|digits:15',
             'city_id' => 'required|integer',
             'gender' => 'required|in:male,female',
             'agreeterm'=>'required',
@@ -67,6 +77,9 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+
+  
+       
         return User::create([
             'name' => $data['name'],
             'lname' => $data['lname'],
@@ -76,5 +89,39 @@ class RegisterController extends Controller
             'city_id' => $data['city_id'],
             'gender' => $data['gender'],
         ]);
+
+        
     }
+
+
+        public function register(Request $request)
+        {
+            $this->validator($request->all())->validate();
+
+            $user = $this->create($request->all());
+
+            event(new Registered($user));
+
+            $this->guard()->login($user);
+
+            UserVerification::generate($user);
+           
+            $link = route('email-verification.check', $user->verification_token) . '?email=' . urlencode($user->email) ;
+         
+
+            $data = array( 'email' => $user->email, 'link' => $link, 'name' =>$user->name );
+            Mail::send('email',
+              $data , function($message) use ($data)
+           {
+            
+           
+               $message->from('raman199126@gmail.com');
+              $message->to($data['email'], 'Admin')->subject('Verify Social Books') ;
+           });
+ 
+
+            return $this->registered($request, $user)
+                            ?: redirect($this->redirectPath());
+        }
+
 }

@@ -19,7 +19,11 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+
+  
+      // $this->middleware('isVerified');
+    
+      return redirect()->route('login')->with('error',"You don't have an access");
     }
 
     /**
@@ -27,6 +31,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
 
     public function getCity() {
         $city = City::select('name')->where('id', Auth::user()->city_id )->get()->first();
@@ -60,17 +65,23 @@ class HomeController extends Controller
 
     // Dashboard
     public function index()
-    {
-        return view('dashboard')->with(['city'=>$this->getCity(),'repo'=>$this->getRepo()]);
+    { 
+          if (Auth::user()->verified == 1) 
+        {   
+            return view('dashboard')->with(['city'=>$this->getCity(),'repo'=>$this->getRepo()]);
+        } else{
+            return view('verify')->with(['city'=>$this->getCity(),'repo'=>$this->getRepo()]);
+        } 
+        
     }
 
     // Owned Items
     public function owneditem()
     {
-        $data = Product::select('products.id','products.image','products.user_id','products.rental_count','products.viewstatus','products.created_at as date',DB::raw('count(product__requests.id) as requests') )
+        $data = Product::select('products.id','products.image','products.user_id', 'products.approved' , 'products.rental_count','products.viewstatus','products.created_at as date',DB::raw('count(product__requests.id) as requests') )
         ->leftJoin('product__requests','products.id','product__requests.product_id')
         ->groupBy('products.id')
-        ->where('products.status','1')->where('products.user_id',Auth::user()->id)->orderBy('products.id','DESC')->paginate(10);
+        ->where('products.status','1')->where('products.user_id',Auth::user()->id)->orderBy('products.id','DESC')->paginate(4);
 
         return view('owned_item')->with(['city'=>$this->getCity(),'repo'=>$this->getRepo(),'data'=>$data]);
     }

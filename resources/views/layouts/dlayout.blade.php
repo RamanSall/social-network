@@ -61,7 +61,9 @@
 	<!-- Chosen js -->
 	<link rel="stylesheet" type="text/css" href="{{ url('/css/chosen.css') }}">
 	<!-- Theme style  -->
-	<link rel="stylesheet" href="{{ url('/css/style.css') }}">
+	<link rel="stylesheet" href="{{ url('/css/style.css?v=9') }}">
+
+	<link rel="stylesheet" href="{{ url('/css/custom.css?v=1.20') }}">
 	<!-- iao Alert  -->
 	<link rel="stylesheet" href="{{ url('/css/iao-alert.min.css') }}">
 	@yield('header')
@@ -105,7 +107,7 @@
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			        <button type="button" class="btn btn-primary">Save changes</button>
+			        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
 			      </div>
 			    </div><!-- /.modal-content -->
 			  </div><!-- /.modal-dialog -->
@@ -174,7 +176,72 @@
 		@yield('footer')
 
 		<script type="text/javascript">
+
 			$(document).ready(function(){
+				    $(".modal").on('shown.bs.modal', function () {
+    console.log("open");
+            loadCategories();
+    });
+
+
+				      function loadSubCategories(data) {
+
+                var rows = '';
+
+                $.each(data,function(index, value) {
+
+                    rows += '<option value="'+value['id']+'">'+value['name']+'</option>';
+
+                });
+
+                return rows;
+
+            }
+
+            
+				    function loadCategories() {
+
+                $.ajax({
+
+                    url: '{{ route('categories') }}',
+
+                    type: 'GET',
+
+                    cache: true,
+
+                    dataType: 'JSON',
+
+                    success:function(data){
+
+                        var sub_category_id = $('#sub_category_id');
+
+                        sub_category_id.chosen('destroy');
+
+                        sub_category_id.empty();
+
+                        sub_category_id.append('<option value=""></option>');
+
+
+
+                        $.each(data,function(index, value) {
+
+                            sub_category_id.append('<optgroup label="'+index+'">'+loadSubCategories(value)+'</optgroup>'); 
+
+                        });
+
+                        sub_category_id.chosen();
+
+                    },
+
+                    error:function(){}
+
+                }); 
+
+            }
+            
+
+
+
 				$('#user_image_form').submit(function(e) {
 			        e.preventDefault();
 			        changeImage('{{ route('change-user-image') }}');
@@ -197,6 +264,64 @@
 		        }
 		        checkNotify();
 		        setInterval(checkNotify,10000);
+
+ function blshow() {
+                $('#loader').show();
+                $('#submit_btn').attr('disabled', 'disabled');
+            }
+
+            function add() {
+                var fdata = new FormData( $('#pform')[0] ); 
+                $.ajax({
+                    url: '{{ route('addproduct') }}',
+                    type: 'POST',
+                    cache: true,
+                    dataType: 'JSON',
+                    data: fdata,
+                    contentType: false,
+                    processData: false,
+                    beforeSend:function(){
+                        blshow();
+                    },
+                    success:function(data){
+                        if(data['errors']) {
+                            $.each(data,function(index, value) {
+                                $.each(value,function(index1, el) {
+                                    calert(el,'error');
+                                });
+                            });
+                        }
+                        else if ( data['inserted'] == 'true' ) {
+                            $('#pform').trigger('reset');
+                            {{-- url('/images/placeholder-img.jpg') --}} 
+                            $("#img-upload").attr("src","");
+                            $('#sub_category_id').val('').trigger('chosen:updated');
+                            // loadData();
+                            calert('Added Successfully.','success');
+                        }
+                        else
+                            calert('Error occured while adding product.','error');    
+                    },
+                    error:function(){ 
+                        calert('Error occured while adding product.','error');
+                    },
+                    complete:function(){
+                        blhide();
+
+                    }
+                });                
+            }
+                  function blhide() {
+                $('#loader').hide();
+                $('#submit_btn').removeAttr('disabled');
+                $('.modal').modal('hide');
+            }
+            $('#pform').submit(function(e) {
+                e.preventDefault();
+                add();
+            });
+
+
 			})
 		</script>
 

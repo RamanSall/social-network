@@ -4,7 +4,7 @@
 
 @section('content')
 	@include('layouts.dnav', ['active' => 'sent_requests'])
-	<div class="col-md-6 col-sm-6">
+	<div class="col-md-6 col-sm-6  yours-books-page ">
 		<div class="content" style="height:900px; width: auto;">
 			<div class="right-side-home">
 				<div class="product-list">

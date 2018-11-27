@@ -1,0 +1,8 @@
+.skin-purple  .navbar-custom-menu{display:none;}
+body.skin-purple .main-header .navbar , body.skin-purple .main-header .logo , .skin-purple .main-header .logo:hover{background-color:transparent!important;}
+body.skin-purple .main-header {background-image: url(http://nexusfleck.com/social/public/images/word-bg.jpg);}
+.dataTables_wrapper{    width: 96%;    margin: 0 auto;}
+.main-header{    padding: 8px 0px;}
+.bookimage{    width: 82px;    height: 82px;}
+body{font-weight: 400!important}
+.content-wrapper .content-header h1{    margin-bottom: 36px;}

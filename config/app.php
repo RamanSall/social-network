@@ -141,6 +141,7 @@ return [
         /*
          * Laravel Framework Service Providers...
          */
+          Collective\Html\HtmlServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
         Illuminate\Bus\BusServiceProvider::class,
@@ -164,6 +165,11 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+         Laravel\Socialite\SocialiteServiceProvider::class,
+         Backpack\MenuCRUD\MenuCRUDServiceProvider::class,
+         Jrean\UserVerification\UserVerificationServiceProvider::class,
+
+
 
         /*
          * Package Service Providers...
@@ -192,7 +198,8 @@ return [
     */
 
     'aliases' => [
-
+        'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
@@ -227,6 +234,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
+         'Form' => Collective\Html\FormFacade::class,
+      'Html' => Collective\Html\HtmlFacade::class,
 
     ],
 

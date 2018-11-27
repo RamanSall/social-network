@@ -65,7 +65,8 @@
                <div class="col-sm-4 form-group">
                   <div class=" {{ $errors->has('phone')?'has-error':'' }}">
                      <label for="phone">Phone</label>
-                     <input type="text" id="phone" name="phone" class="form-control" required placeholder="3589XXXXXX" pattern="3589[\d*]{6}" title="3589XXXXXX" maxlength="10" minlength="10" tabindex="6" value="{{old('phone')}}">
+                     <!-- <input type="text" id="phone" name="phone" class="form-control" required placeholder="3589XXXXXX" pattern="3589[\d*]{6}" title="3589XXXXXX" maxlength="10" minlength="10" tabindex="6" value="{{old('phone')}}"> -->
+                     <input type="text" id="phone" name="phone" class="form-control" required placeholder="3589XXXXXX"  title="3589XXXXXX" maxlength="15" minlength="10" tabindex="6" value="{{old('phone')}}">
                      @if ($errors->has('phone'))
                      <span class="help-block">
                      <strong>{{ $errors->first('phone') }}</strong>

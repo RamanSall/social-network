@@ -1,3 +1,4 @@
+ 
 @extends('layouts.dlayout')
 
 @section('pageTitle','Owned Items')
@@ -17,6 +18,7 @@
 					        <th>Rentals</th>
 					        <th>Requests</th>
 					        <th>Availability</th>
+                  <th>Status</th>
 					      </tr>
 					    </thead>
 					    <tbody>
@@ -41,11 +43,20 @@
 	                  </td>
 	                  <td>
 	                  	@if ($val->viewstatus == 1)
-                        <span class="text text-success">Available</span>
+                        <span class="text text-success">Available</span>                       
                       @else
                         <span class="text text-danger">Not Available</span>
                       @endif
 	                  </td>
+                    <td>
+                      @if ($val->approved == 1)
+                        <span class="text text-success">Published</span>
+                         @elseif ($val->approved == 2)
+                         <span class="text text-danger">Dis-approved</span>
+                      @else
+                        <span class="text ">Pending</span>
+                      @endif
+                    </td>
                   </tr>
 					    	@endforeach
 					    </tbody>

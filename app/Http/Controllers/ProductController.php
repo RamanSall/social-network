@@ -14,6 +14,15 @@ use Auth;
 
 class ProductController extends Controller
 {
+
+    public function __construct()
+    {
+        // $this->middleware('auth');
+              return redirect()->route('login')->with('error',"You don't have an access");
+    }
+
+
+
     public function getProducts($skip,$limit,$name)
     {
     	$data = Product::select('products.id','products.name','products.sub_category_id','products.image','products.user_id','sub_categories.name as category_name','users.city_id','users.name as owner_name','cities.name as city')

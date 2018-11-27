@@ -12,6 +12,7 @@
 							<li class="{{ $active == 'gallery'?'active':'' }}"><a href="{{ route('gallery') }}">Book Gallery</a></li>
 							 
                             <li class="{{ $active == 'about'?'active':'' }}"><a href="{{ url('about') }}">About</a></li>
+                             <li class="{{ $active == 'contact-us'?'active':'' }}"><a href="{{ url('contact-us') }}">Contact Us</a></li>
 							@guest
 								<li class="btn-cta {{ $active =='login'?'active':'' }}"><a href="{{ route('login') }}"><span class="btn-top-log">Login</span></a></li>
 								<!-- <li class="btn-cta {{ $active=='register'?'active':'' }}"><a href="{{ route('register') }}"><span class="btn-top-log">Sign Up</span></a></li> -->
@@ -27,6 +28,11 @@
 
                                 <ul class="dropdown-menu">
                                 	<li class="{{ $active =='dashboard'?'active':'' }}"><a href="{{ route('owneditem') }}"><span>Dashboard</span></a></li>
+                                    @if( Auth::user()->role == 'admin')
+                                   <li><a href="{{ route('admindashboard') }}"><span>Admin Dashboard</span></a></li>
+
+                                     @endif
+
                                     <li>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

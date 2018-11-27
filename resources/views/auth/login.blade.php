@@ -55,7 +55,11 @@
                   </div>
                </div>
             </form>
+
+           
+ 
          </div>
+          <!-- <a href="{{ route('fblogin') }}">Facebook Login </a> -->
       </div>
    </div>
 </div>

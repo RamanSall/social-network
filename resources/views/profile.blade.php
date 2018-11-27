@@ -2,7 +2,7 @@
 @section('pageTitle','User Profile')
 @section('content')
 @include('layouts.nav', ['active' => 'gallery'])
-<div class="container">
+<div class="container  home-content">
 <div class="row">
    <div style="padding-top: 40px"></div>
    <div class="col-md-12">

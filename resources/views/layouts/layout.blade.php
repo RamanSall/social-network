@@ -63,6 +63,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ url('/css/chosen.css') }}">
 	<!-- Theme style  -->
 	<link rel="stylesheet" href="{{ url('/css/style.css') }}">
+	<link rel="stylesheet" href="{{ url('/css/custom.css') }}">
 	<!-- iao Alert  -->
 	<link rel="stylesheet" href="{{ url('/css/iao-alert.min.css') }}">
 	@yield('header')

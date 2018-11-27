@@ -1,3 +1,4 @@
+ 
 @extends('layouts.dlayout')
 
 @section('pageTitle','Dashboard')
@@ -14,6 +15,9 @@
 </div> --}}
 
 @include('layouts.dnav', ['active' => 'add_item'])
+
+
+
 <?php $active = 'add_item';  ?>
 <div class="col-md-6 col-sm-6">
     <div class="content" style="max-height: 900px; width: auto;">

@@ -34,5 +34,11 @@ return [
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
+      'facebook' => [
+    'client_id' => '1617779324989115',
+    'client_secret' => '1bb01450487ebdc1732e7d87aeb456b0',
+    'redirect' => 'https://nexusfleck.com/social/public/auth/facebook/callback',
+   ],
+
 
 ];

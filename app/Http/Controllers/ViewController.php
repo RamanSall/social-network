@@ -28,7 +28,7 @@ class ViewController extends Controller
 	        ->join('cities','users.city_id','cities.id')
 	        ->leftJoin('products as productss','products.user_id','productss.user_id')
 	        ->groupBy('products.id')
-	        ->where('products.status','1')->where('products.viewstatus','1');
+	        ->where('products.status','1')->where('products.viewstatus','1')->where('products.approved','1');
 	        if($req->name) {
 	            $data = $data->where('products.name', 'LIKE', '%'.$req->name.'%')->orWhere('cities.name', 'LIKE', '%'.$req->name.'%')->orWhere('products.author', 'LIKE', '%'.$req->name.'%');
 	            array_push($search, array('name'=>$req->name));
@@ -41,7 +41,7 @@ class ViewController extends Controller
 	            $data = $data->where('sub_categories.id', $req->sub_category_id );
 
 	        
-	        $data=$data->orderBy('id','DESC')->paginate(16);
+	        $data=$data->orderBy('id','DESC')->paginate(12);
 
 	        // For Search Query
 	        if ( $req->category_id ) 

@@ -10,16 +10,19 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Validator;
+use Mail;
 
 class ProductRequestController extends Controller
 {
     public function __construct()
     {
-    	$this->middleware('auth');
+    	// $this->middleware('auth');
+              return redirect()->route('login')->with('error',"You don't have an access");
     }
 
     public function borrowReq(Request $req)
     {
+
     	$json['inserted'] = 'false';
         $rules = [
             'lent_user' => 'required|numeric|not_in:0',
@@ -30,11 +33,12 @@ class ProductRequestController extends Controller
             'product_id' => "Product's",
         ];
         $validator = Validator::make(Input::all(),$rules,[],$cAttributes);
+
         if( $validator->fails() )
             $json['error'] = $validator->errors()->first();
         else {
             $id = Auth::user()->id;
-            $countData = Product::where('user_id',$id)->where('status',1)->get()->count(); 
+            $countData = Product::where('user_id',$id)->where('status',1)->where('approved',1)->get()->count(); 
             if($countData < 2)
                 $json['error'] = 'At least add two items to send the request.';
             else {
@@ -49,10 +53,21 @@ class ProductRequestController extends Controller
                     $data->save();
                     
                     //Reputation Points
-                    $lentUser = User::find($req->lent_user);
+                    $lentUser = User::find($req->lent_user);                     
                     $lentUser->up_points += 5;
                     $lentUser->save();
+
+                    $data = array( 'email' => $lentUser->email, 'Message' => " Hi,  ".Auth::user()->name." has sent you request to borrow book. Please login into dashboard and reply ", 'name' =>$lentUser->name );
+                    Mail::send('emailsendrequest',
+                      $data , function($message) use ($data)
+                   {                 
+                   
+                       $message->from('info@social.com');
+                      $message->to($data['email'], 'Admin')->subject('Book Request Recieved') ;
+                   });
+
                     $json['inserted'] = 'true';
+
                 }
             }
         }

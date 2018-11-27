@@ -6,7 +6,7 @@
 
 @include('layouts.dnav', ['active' => 'borrowreq'])
 
-<div class="col-md-6 col-sm-6">
+<div class="col-md-6 col-sm-6 yours-books-page">
 	<div class="content" style="height:900px; width: auto;">
 		<div class="right-side-home">
 			<div class="product-list">
@@ -34,7 +34,7 @@
                     info
                   @endif" 
                   >
-				    			<td>
+				    			<td     width=128px;>
                   	@php
                   		$date = explode(' ',$val->date);
                   		echo date("d M Y", strtotime($date[0]));
@@ -51,6 +51,7 @@
                   	</a>
                   </td>
                   <td>
+                   
                   	@php
                   		$disAccept = $disReject = $disLend = $showBtns = $statusText = '';
                       if ($val->status == 0) {
@@ -76,6 +77,7 @@
                   	@endphp	
                     
                     @if($showBtns)
+                    <p style="text-align: left;margin-top: 0;"> Hi, I would like to borrow book for my studies. Thank you very much</p>
   										<button type="button" class="btn btn-success accept_btn" {{ $disAccept }} request_id="{{ $val->id }}" >Accept</button>
                       <button type="button" class="btn btn-danger reject_btn" {{ $disReject }} request_id="{{ $val->id }}" >Reject</button>
                       <button type="button" class="btn btn-primary lend_btn" {{ $disLend }} request_id="{{ $val->id }}" >Lend</button>	

@@ -15,7 +15,7 @@
             <div class="fh5co-nav home-btn">
             	<ul>
             		<!-- <li class="btn-cta"><a href="{{ route('register') }}"><span class="btn-top-log">Sign Up</span></a></li> -->
-            		<li class="btn-cta "><a href="http://52.12.184.64/Social_Network-master/public/register"><span class="btn-top-log">Sign Up</span></a></li>
+            		<li class="btn-cta "><a href="{{url('register')}}"><span class="btn-top-log">Sign Up</span></a></li>
             	</ul>
             	<p>for free and join bookmate’s growing community of readers.</p>
             </div>

@@ -43,20 +43,18 @@ class Kernel extends HttpKernel
         ],
     ];
 
-    /**
-     * The application's route middleware.
-     *
-     * These middleware may be assigned to groups or used individually.
-     *
-     * @var array
-     */
-    protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'goodUser' => \App\Http\Middleware\CheckUserProducts::class,
-    ];
+   /**
+  * The application's route middleware.
+  *
+  * @var array
+  */
+  protected $routeMiddleware = [
+        'isVerified' => \Jrean\UserVerification\Middleware\IsVerified::class,
+        'isadmin' => \App\Http\Middleware\AdminMiddleware::class,
+    'auth' => 'App\Http\Middleware\Authenticate',
+    'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
+    'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
+        # LINE TO BE ADDED HERE:
+        // 'admin' => 'App\Http\Middleware\AdminMiddleware',
+  ];
 }

@@ -41,11 +41,17 @@ Auth::routes();
 */
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
  
+Route::group(['middleware' => ['isVerified']], function () {
+
+
+ 
 Route::get('/owned-items', 'HomeController@owneditem')->name('owneditem');
 Route::get('/sent-requests', 'HomeController@sentReq')->name('sentReq');
 Route::get('/received-requests', 'HomeController@receivedReq')->name('receivedReq');
 Route::get('/rentals', 'HomeController@rentals')->name('rentals');
 Route::get('/borrowals', 'HomeController@borrowals')->name('borrowals');
+});
+
 Route::get('/check-notifications', 'HomeController@checkNotifications')->name('checknoti');
 Route::post('/set-notifications', 'HomeController@setNotifications')->name('setnoti');
 /*
@@ -88,8 +94,8 @@ Route::get('/userproducts/{id}/{limit}','ProductController@getProductsUserLimit'
 //Route::get('/userborrowrequest/{id}/{skip}/{limit}','ProductController@getBorrowRequestProducts');
 // Route::get('/userlentproducts/{id}/{skip}/{limit}','ProductController@getLentProducts');
 // Route::get('/userborrowedproducts/{id}/{skip}/{limit}','ProductController@getBorrowedProducts');
-Route::post('/addproduct','ProductController@addProduct')->name('addproduct')->middleware('auth');
-Route::post('/deleteproduct','ProductController@delProduct')->name('deleteproduct')->middleware('auth');
+Route::post('/addproduct','ProductController@addProduct')->name('addproduct');
+Route::post('/deleteproduct','ProductController@delProduct')->name('deleteproduct');
 
 /*
 |--------------------------------------------------------------------------
@@ -100,3 +106,52 @@ Route::post('/deleteproduct','ProductController@delProduct')->name('deleteproduc
 Route::post('/reqborrow', 'ProductRequestController@borrowReq')->name('reqborrow');
 Route::post('/updatereqborrow', 'ProductRequestController@updateBorrowReq')->name('updatereqborrow');
 Route::post('/review-book', 'ProductRequestController@review')->name('review');
+
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Socialite Routes
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('auth/facebook', 'Auth\AuthController@redirectToProvider')->name('fblogin');
+Route::get('auth/facebook/callback', 'Auth\AuthController@handleProviderCallback');
+
+/*
+|--------------------------------------------------------------------------
+| Admin Products Routes
+|--------------------------------------------------------------------------
+|
+*/
+// Route::get('admin_area', ['middleware' => 'admin', function () {
+Route::group(['middleware' => 'isadmin'], function () {
+
+Route::get('admin/product/getApprovedProducts', 'Admin\ProductsController@getApprovedProducts')->name('getApproved');
+Route::get('admin/product/getdisapproveProducts', 'Admin\ProductsController@getdisapproveProducts')->name('disApproved');
+Route::get('admin/product', 'Admin\ProductsController@getProducts')->name('admindashboard');
+
+Route::get('admin/contact', 'Admin\ContactController@getfeedback')->name('contactashboard');
+
+
+
+
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| Admin 
+|--------------------------------------------------------------------------
+|
+*/
+
+Route::get('admin', ['middleware' => 'admin', 'uses' => 'AdminController@index']);
+
+ 
+ 
+
+ Route::get('contact-us', 'ContactUSController@contactUS');
+Route::post('contact-us', ['as'=>'contactus.store','uses'=>'ContactUSController@contactUSPost']);
